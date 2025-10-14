@@ -1,36 +1,47 @@
 <?php
-include "koneksi.php";
+$dataFile = "data.json";
+$data = json_decode(file_get_contents($dataFile), true) ?? [];
 
-if(isset($_POST['simpan'])){
-    $nama = $_POST['nama_karyawan'];
-    $jabatan = $_POST['jabatan'];
-
-    $sql = "INSERT INTO karyawan (nama_karyawan, jabatan) VALUES ('$nama', '$jabatan')";
-    $query = mysqli_query($koneksi, $sql);
-
-    if($query){
-        header("Location: index.php");
-    } else {
-        echo "Gagal tambah data";
-    }
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $new = [
+        'id' => time(),
+        'nama' => $_POST['nama'],
+        'jabatan' => $_POST['jabatan'],
+        'status' => 'Aktif'
+    ];
+    $data[] = $new;
+    file_put_contents($dataFile, json_encode($data, JSON_PRETTY_PRINT));
+    header("Location: index.php");
+    exit;
 }
 ?>
-
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-    <title>Tambah Data Karyawan</title>
+<meta charset="UTF-8">
+<title>Tambah Karyawan</title>
+<style>
+    body {font-family:'Poppins',sans-serif;background:linear-gradient(135deg,#fce7f3,#f8d7e8);margin:0;padding:0;}
+    .container {max-width:500px;margin:70px auto;background:rgba(255,255,255,.85);backdrop-filter:blur(10px);padding:30px;border-radius:20px;box-shadow:0 10px 25px rgba(0,0,0,.1);}
+    h2 {text-align:center;color:#d63384;}
+    label {display:block;margin-top:15px;font-weight:500;color:#555;}
+    input {width:100%;padding:10px;margin-top:5px;border:1px solid #ddd;border-radius:10px;font-size:14px;}
+    .btn {margin-top:20px;padding:10px 20px;border:none;border-radius:12px;background:linear-gradient(135deg,#d63384,#f06292);color:#fff;font-weight:500;width:100%;cursor:pointer;}
+    .btn:hover {background:linear-gradient(135deg,#b0266b,#e75480);}
+    a {display:block;text-align:center;margin-top:15px;color:#d63384;text-decoration:none;}
+</style>
 </head>
 <body>
-    <h2>Tambah Data Karyawan</h2>
-    <form method="POST">
-        <label>Nama Karyawan:</label><br>
-        <input type="text" name="nama_karyawan" required><br><br>
-
-        <label>Jabatan:</label><br>
-        <input type="text" name="jabatan" required><br><br>
-
-        <input type="submit" name="simpan" value="Simpan">
+<div class="container">
+    <h2>Tambah Karyawan ✨</h2>
+    <form method="post">
+        <label>Nama Karyawan:</label>
+        <input type="text" name="nama" required>
+        <label>Jabatan:</label>
+        <input type="text" name="jabatan" required>
+        <button class="btn" type="submit">Simpan</button>
     </form>
+    <a href="index.php">← Kembali</a>
+</div>
 </body>
 </html>
