@@ -11,11 +11,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($result) {
         echo "<script>alert('Data berhasil ditambahkan!'); window.location='index.php';</script>";
     } else {
-        echo "Gagal menambahkan data: " . mysqli_error($koneksi);
+        echo "Gagal menambah data: " . mysqli_error($koneksi);
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
