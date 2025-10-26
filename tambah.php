@@ -1,35 +1,26 @@
 <?php
-$dataFile = "data.json";
-$data = json_decode(file_get_contents($dataFile), true) ?? [];
+include "koneksi.php";
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $new = [
-        'id' => time(),
-        'nama' => $_POST['nama'],
-        'jabatan' => $_POST['jabatan'],
-        'status' => 'Aktif'
-    ];
-    $data[] = $new;
-    file_put_contents($dataFile, json_encode($data, JSON_PRETTY_PRINT));
-    header("Location: index.php");
-    exit;
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $nama = $_POST['nama'];
+    $jabatan = $_POST['jabatan'];
+
+    $query = "INSERT INTO karyawan (nama_karyawan, jabatan) VALUES ('$nama', '$jabatan')";
+    $result = mysqli_query($koneksi, $query);
+
+    if ($result) {
+        echo "<script>alert('Data berhasil ditambahkan!'); window.location='index.php';</script>";
+    } else {
+        echo "Gagal menambahkan data: " . mysqli_error($koneksi);
+    }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<title>Tambah Karyawan</title>
-<style>
-    body {font-family:'Poppins',sans-serif;background:linear-gradient(135deg,#fce7f3,#f8d7e8);margin:0;padding:0;}
-    .container {max-width:500px;margin:70px auto;background:rgba(255,255,255,.85);backdrop-filter:blur(10px);padding:30px;border-radius:20px;box-shadow:0 10px 25px rgba(0,0,0,.1);}
-    h2 {text-align:center;color:#d63384;}
-    label {display:block;margin-top:15px;font-weight:500;color:#555;}
-    input {width:100%;padding:10px;margin-top:5px;border:1px solid #ddd;border-radius:10px;font-size:14px;}
-    .btn {margin-top:20px;padding:10px 20px;border:none;border-radius:12px;background:linear-gradient(135deg,#d63384,#f06292);color:#fff;font-weight:500;width:100%;cursor:pointer;}
-    .btn:hover {background:linear-gradient(135deg,#b0266b,#e75480);}
-    a {display:block;text-align:center;margin-top:15px;color:#d63384;text-decoration:none;}
-</style>
+    <meta charset="UTF-8">
+    <title>Tambah Karyawan</title>
 </head>
 <body>
 <div class="container">
